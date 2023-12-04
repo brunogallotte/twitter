@@ -18,8 +18,6 @@ class RegisterUserView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         if 'password' not in request.data:
             return Response({'error': 'O campo password é obrigatório!'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        request.data['is_active'] = True
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
