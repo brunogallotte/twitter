@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-pz&_aw^0pl8vr-e(h3d93!anez632jkp1qb3fy%&lel+8vriby
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'brunogallotte.pythonanywhere.com', 'localhost:3000']
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # ou o URL do seu front-end
@@ -44,10 +44,11 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "users",
-    "tweets"
+    "tweets",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -55,7 +56,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware"
 ]
 
 ROOT_URLCONF = "backend.urls"
