@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'brunogallotte.pythonanywhere.com', 'localhost:3000']
 
 CORS_ALLOWED_ORIGINS = [
-    "localhost:3000",  # ou o URL do seu front-end
+    "http://localhost:3000",  # ou o URL do seu front-end
 ]
 
 

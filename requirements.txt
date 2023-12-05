@@ -1,9 +1,13 @@
 asgiref==3.7.2
 Django==5.0
+django-cors-headers==4.3.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.3.1
+gitdb==4.0.11
+GitPython==3.1.40
 PyJWT==2.8.0
 pytz==2023.3.post1
 simplejwt==2.0.1
+smmap==5.0.1
 sqlparse==0.4.4
 typing==3.7.4.3
