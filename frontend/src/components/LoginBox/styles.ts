@@ -10,7 +10,7 @@ export const FormControl = styled.form`
     align-items: center;
 `
 
-export const BoxLogin = styled.div`
+export const BoxForm = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -46,5 +46,12 @@ export const BoxLogin = styled.div`
         &:hover {
             background-color: #6d44b8;
         }
+    }
+
+    span {
+        margin-top: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: underline;
     }
 `
