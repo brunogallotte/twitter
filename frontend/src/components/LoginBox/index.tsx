@@ -56,7 +56,7 @@ const LoginBox = () => {
     const handlePostLogin = () => {
         SetIsLoading(true)
 
-        fetch('http://brunogallotte.pythonanywhere.com/login/', {
+        fetch('https://brunogallotte.pythonanywhere.com/login/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ const LoginBox = () => {
     }
 
     const handlePostRegister = () => {
-        fetch('http://brunogallotte.pythonanywhere.com/register/', {
+        fetch('https://brunogallotte.pythonanywhere.com/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

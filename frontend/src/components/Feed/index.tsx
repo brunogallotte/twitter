@@ -34,7 +34,7 @@ const Feed = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://brunogallotte.pythonanywhere.com/tweets/', {
+                const response = await fetch('https://brunogallotte.pythonanywhere.com/tweets/', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const Feed = () => {
                         // Após renovar, tentar novamente a requisição original
 
                         navigate('/')
-                        const retryResponse = await fetch('http://brunogallotte.pythonanywhere.com/tweets/', {
+                        const retryResponse = await fetch('https://brunogallotte.pythonanywhere.com/tweets/', {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ const Feed = () => {
                 
                 // Request Users
 
-                const responseUser = await fetch('http://brunogallotte.pythonanywhere.com/users/', {
+                const responseUser = await fetch('https://brunogallotte.pythonanywhere.com/users/', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ const Feed = () => {
         }
         const renewAccessToken = async () => {
             try {
-                const renewResponse = await fetch('http://brunogallotte.pythonanywhere.com/token/refresh/', {
+                const renewResponse = await fetch('https://brunogallotte.pythonanywhere.com/token/refresh/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const Feed = () => {
 
     const handlePostTweet = async () => {
         try {
-            const response = await fetch('http://brunogallotte.pythonanywhere.com/tweets/', {
+            const response = await fetch('https://brunogallotte.pythonanywhere.com/tweets/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
