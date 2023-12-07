@@ -7,7 +7,8 @@ export const colors = {
     purpleHover: '#6d44b8',
     purpleBackground: '#B290EA',
     darkGrey: '#212121',
-    lightGrey: '#3c3c3c'
+    lightGrey: '#3c3c3c',
+    darkRed: '#800000'
 }
 
 export const fontSize = {

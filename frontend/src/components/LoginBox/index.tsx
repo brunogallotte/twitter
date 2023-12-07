@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { BoxForm, FormControl } from "./styles";
 import { ClipLoader } from "react-spinners";
+import Modal from "../Modal";
 
 type FormState = {
     username: string
@@ -12,6 +13,12 @@ type MailState = {
     email: string
 }
 
+export type ModalState = {
+    isVisible: boolean
+    title: string
+    description: string
+}
+
 const LoginBox = () => {
     const [formState, setFormState] = useState<FormState>({username: '', password: ''})
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -19,6 +26,8 @@ const LoginBox = () => {
     const [showRegister, setShowRegister] = useState(false)
     const [registerData, setRegisterData] = useState({})
     const [isLoading, SetIsLoading] = useState(false)
+    const [showModal, setShowModal] = useState<ModalState>({isVisible: false, title: '', description: ''})
+
     const navigate = useNavigate()
 
     const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -77,8 +86,8 @@ const LoginBox = () => {
                     // Armazena os tokens no armazenamento local
                     localStorage.setItem('accessToken', data.access);
                     localStorage.setItem('refreshToken', data.refresh);
-        
-                    alert('Logado com sucesso!');
+                    
+                    handleShowModal('Sucesso', 'Usuário logado')
     
                      // Limpar os estados
                     setFormState({username: '', password: ''})
@@ -89,21 +98,20 @@ const LoginBox = () => {
                     navigate('/home')
     
                 } else {
-                    alert('Conta não encontrada, clique em registrar-se.');
+                    handleShowModal('Erro', 'Conta não encontrada, clique em registrar-se.')
                     SetIsLoading(false)
                 }
             })
             .catch(error => {
-                alert('Erro ao tentar fazer login. Verifique sua conexão com a internet.');
-                console.error(error.message);
+                handleShowModal('Erro', 'Erro ao tentar fazer login. Verifique sua conexão com a internet.')
             })
             
         } else if (!formState.username.length) {
-            alert('Digite um username válido!')
+            handleShowModal('Erro', 'Digite um usuário válido!')
         } else if (formState.password.length < 7) {
-            alert('Digite um password válido!')
+            handleShowModal('Erro', 'Digite um password válido!')
         } else {
-            alert('Credenciais inválidas!')
+            handleShowModal('Erro', 'Credenciais inválidas!')
         }
     }
 
@@ -118,7 +126,7 @@ const LoginBox = () => {
             })
             .then(response => {
                 if(response.ok) {
-                    alert('Usuário registrado!')
+                    handleShowModal('Sucesso', 'Usuário registrado!')
     
                     // Limpar os campos de registro
                     document.querySelectorAll('input').forEach(input => (input.value = ''))
@@ -129,28 +137,36 @@ const LoginBox = () => {
                     // Navegar para home
                     navigate('/home')
                 } else {
-                    alert('Erro ao se cadastrar!')
+                    handleShowModal('Erro', 'Não foi possível se cadastrar!')
                 }
             })
             .catch(error => {
-                alert('Erro ao tentar se registrar. Verifique sua conexão com a internet.');
-                console.error(error.message);
+                handleShowModal('Erro', 'Erro ao tenta se registrar. Verifique sua conexão com a internet.')
             })
         } else if (!registerData) {
-            alert('Não foi possível se cadastrar!')
+            handleShowModal('Erro', 'Não foi possível se cadastrar!')
         } else if (!email) {
-            alert('Digite um e-mail válido!')
+            handleShowModal('Erro', 'Digite um e-mail válido!')
         } else if (formState.password.length < 7) {
-            alert('Sua senha deve conter pelo menos 8 digitos')
+            handleShowModal('Erro', 'Sua senha deve conter pelo menos 8 dígitos.')
         } else if (formState.password !== confirmPassword) {
-            alert('A senha do campo password deve ser idêntica a do confirm password!')
+            handleShowModal('Erro', 'As senhas não condizem.')
         } else {
-            alert('Não foi possível regsitrar sua conta, tente novos dados!')
+            handleShowModal('Erro', 'Não foi possível registrar sua conta, tente novos dados!')
         }
     }
 
+    const handleShowModal = (title: string, description: string): void => {
+        setShowModal({isVisible: true, title: title, description: description})
+    }
+
+    const handleCloseModal = () => {
+        setShowModal({isVisible: false, title: '', description: ''})
+    }
+
     return (
-        <FormControl>
+        <>
+            <FormControl>
             {showRegister ? 
             (<BoxForm>
                 <h1>Register</h1>
@@ -168,6 +184,8 @@ const LoginBox = () => {
                 <span onClick={toggleRegisterForm}>Register-me</span>
             </BoxForm>)}
         </FormControl>
+        {showModal.isVisible ? <Modal handleCloseModal={handleCloseModal} handleShowModal={handleShowModal} title={showModal.title} description={showModal.description}/> : null}
+        </>
     )
 }
 

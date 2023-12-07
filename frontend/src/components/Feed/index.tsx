@@ -1,11 +1,13 @@
 import { ChangeEvent, useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 
 import Button from "../Button"
 import { BoxTweet, FeedBox, UsersBox } from "./styles"
 import Tweet, { TweetData } from "../Tweet"
 import { RingLoader } from "react-spinners"
 import { LoadingContainer } from "../Tweet/styles"
+import { ModalState } from "../LoginBox"
+import Modal from "../Modal"
 
 interface UsersResponse {
     count: number
@@ -28,8 +30,10 @@ const Feed = () => {
     const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken'))
     const [users, setUsers] = useState<UsersResponse | null>(null)
     const [tweetContent, setTweetContent] = useState({content: ''})
+    const [showModal, setShowModal] = useState<ModalState>({isVisible: false, title: '', description: ''})
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,10 +49,11 @@ const Feed = () => {
                 if (!response.ok) {
                     if (response.status === 401) {
                         await renewAccessToken();
-                        alert('Você precisa estar logado para visualizar os tweets!')
-                        // Após renovar, tentar novamente a requisição original
+                        handleShowModal('Erro', 'Você precista estar logado para visualizar os tweets!')
 
-                        navigate('/')
+                        // Após renovar, tenta novamente a requisição original
+
+                        
                         const retryResponse = await fetch('https://brunogallotte.pythonanywhere.com/tweets/', {
                             method: 'GET',
                             headers: {
@@ -151,50 +156,65 @@ const Feed = () => {
         }
     }
 
+    const handleShowModal = (title: string, description: string): void => {
+        setShowModal({isVisible: true, title: title, description: description})
+    }
+
+    const handleCloseModal = () => {
+        setShowModal({isVisible: false, title: '', description: ''})
+        
+        if (location.pathname === '/home') {
+            navigate('/')
+        }
+    }
+
     return (
-        <FeedBox className="container">
-            <BoxTweet>
-                <div className="boxGrey">
-                    <h2>Express yourself</h2>
-                    <textarea value={tweetContent.content} onChange={handleTweetChange} placeholder="write your tweet here!"/>
-                    <div className="boxButton">
-                        <Button onClick={handlePostTweet}>Tweet</Button>
+        <>
+            <FeedBox className="container">
+                <BoxTweet>
+                    <div className="boxGrey">
+                        <h2>Express yourself</h2>
+                        <textarea value={tweetContent.content} onChange={handleTweetChange} placeholder="write your tweet here!"/>
+                        <div className="boxButton">
+                            <Button onClick={handlePostTweet}>Tweet</Button>
+                        </div>
                     </div>
-                </div>
-                <div className="verticalLine">
-                    <h2>Feed</h2>
-                </div>
-                <div>
-                {Array.isArray(data.results) && data.results.length > 0 ? (
-                        data.results.slice().reverse().map((tweet, index) => (
-                            <Tweet key={index} user={tweet.user} content={tweet.content} created_at={tweet.created_at} />
-                        ))
+                    <div className="verticalLine">
+                        <h2>Feed</h2>
+                    </div>
+                    <div>
+                    {Array.isArray(data.results) && data.results.length > 0 ? (
+                            data.results.slice().reverse().map((tweet, index) => (
+                                <Tweet key={index} user={tweet.user} content={tweet.content} created_at={tweet.created_at} />
+                            ))
+                        ) : (
+                            <LoadingContainer>
+                                <RingLoader color="rgba(39, 0, 86, 1)" />
+                            </LoadingContainer>
+                        )}
+                    </div>
+                </BoxTweet>
+                <UsersBox>
+                    <div className="verticalLine">
+                        <h3>Users</h3>
+                    </div>
+                    {users?.results && Array.isArray(users?.results) && users?.results.length > 0 ? (
+                        <ul>
+                            {users?.results.map((user, index) => (
+                                <li key={index}>
+                                    @{user.username}
+                                </li>
+                            ))}
+                        </ul>
                     ) : (
                         <LoadingContainer>
                             <RingLoader color="rgba(39, 0, 86, 1)" />
                         </LoadingContainer>
                     )}
-                </div>
-            </BoxTweet>
-            <UsersBox>
-                <div className="verticalLine">
-                    <h3>Users</h3>
-                </div>
-                {users?.results && Array.isArray(users?.results) && users?.results.length > 0 ? (
-                    <ul>
-                        {users?.results.map((user, index) => (
-                            <li key={index}>
-                                @{user.username}
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <LoadingContainer>
-                        <RingLoader color="rgba(39, 0, 86, 1)" />
-                    </LoadingContainer>
-                )}
-            </UsersBox>
-        </FeedBox>
+                </UsersBox>
+            </FeedBox>
+            {showModal.isVisible ? <Modal handleShowModal={handleShowModal} handleCloseModal={handleCloseModal} title={showModal.title} description={showModal.description} /> : null}
+        </>
     )
 }
 
