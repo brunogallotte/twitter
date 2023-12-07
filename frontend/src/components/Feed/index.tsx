@@ -186,7 +186,7 @@ const Feed = () => {
                     <ul>
                         {users?.results.map((user, index) => (
                             <li key={index}>
-                                {user.username}
+                                @{user.username}
                             </li>
                         ))}
                     </ul>

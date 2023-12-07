@@ -11,11 +11,11 @@ export interface TweetData {
 const Tweet: React.FC<TweetData> = ({ user, content, created_at }) => {
     return (
         <TweetContent>
-            <h4>{user}</h4>
+            <h4>@{user}</h4>
             <p>{content}</p>
             <span>{created_at}</span>
         </TweetContent>
-    );
-};
+    )
+}
 
 export default Tweet;
