@@ -1,4 +1,5 @@
 import { styled } from 'styled-components'
+import { colors, fontSize } from '../../styles'
 
 export const FormControl = styled.form`
     height: 100vh;
@@ -17,8 +18,8 @@ export const BoxForm = styled.div`
     justify-content: center;
     padding: 32px;
     width: 100%;
-    background-color: #240046;
-    color: #fff;
+    background-color: ${colors.purpleDark};
+    color: ${colors.white};
     border-radius: 8px;
 
     h1 {
@@ -28,6 +29,11 @@ export const BoxForm = styled.div`
     input {
         padding: 8px;
         margin-bottom: 16px;
+        font-size: ${fontSize.small};
+
+        &:focus {
+            outline: none;
+        }
     }
 
     button {
@@ -36,15 +42,15 @@ export const BoxForm = styled.div`
         border-radius: 4px;
         border: none;
         cursor: pointer;
-        font-size: 1rem;
+        font-size: ${fontSize.medium};
         width: 50%;
-        background-color: #573b8a;
-        color: #fff;
+        background-color: ${colors.purpleLight};
+        color: ${colors.white};
         font-weight: bold;
         transition: .2s ease-in;
 
         &:hover {
-            background-color: #6d44b8;
+            background-color: ${colors.purpleHover};
         }
     }
 

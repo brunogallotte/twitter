@@ -72,7 +72,6 @@ const Feed = () => {
                 setData(jsonData);
                 
                 // Request Users
-
                 const responseUser = await fetch('https://brunogallotte.pythonanywhere.com/users/', {
                     method: 'GET',
                     headers: {
@@ -89,6 +88,8 @@ const Feed = () => {
                 console.error('Error fetching data:', error);
             }
         }
+
+        // Renovar token de acesso [refresh]
         const renewAccessToken = async () => {
             try {
                 const renewResponse = await fetch('https://brunogallotte.pythonanywhere.com/token/refresh/', {
@@ -108,7 +109,6 @@ const Feed = () => {
                 const renewedTokens = await renewResponse.json();
 
                 // Atualiza o estado ou armazenamento local com os novos tokens
-
                 setAccessToken(renewedTokens.access);
                 setRefreshToken(renewedTokens.refresh);
 
@@ -118,8 +118,6 @@ const Feed = () => {
                 // Limpar os tokens de acesso e atualização
                 setAccessToken(null);
                 setRefreshToken(null);
-
-                // Lidar com o erro de renovação do token, por exemplo, redirecionar para a página de login
             }
         };
 
@@ -156,7 +154,7 @@ const Feed = () => {
     return (
         <FeedBox className="container">
             <BoxTweet>
-                <div className="teste">
+                <div className="boxGrey">
                     <h2>Express yourself</h2>
                     <textarea value={tweetContent.content} onChange={handleTweetChange} placeholder="write your tweet here!"/>
                     <div className="boxButton">

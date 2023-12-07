@@ -1,14 +1,15 @@
 import { styled } from 'styled-components'
+import { colors } from '../../styles'
 
 export const HeaderBar = styled.div`
-    background-color: #1b004b;
+    background-color: ${colors.purpleDark};
 `
 
 export const NavBar = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #fff;
+    color: ${colors.white};
     min-height: 80px;
 
     ul {

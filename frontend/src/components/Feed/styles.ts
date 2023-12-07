@@ -1,30 +1,31 @@
 import { styled } from 'styled-components'
+import { colors, fontSize } from '../../styles'
 
 export const FeedBox = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-content: center;
+    display: flex;
     padding-top: 32px;
+    justify-content: center;
 `
 
 export const BoxTweet = styled.div`
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 70%;
 
-    .teste {
-        background-color: #212121;
+    .boxGrey {
+        background-color: ${colors.darkGrey};
         border-radius: 8px;
         padding: 8px;
         margin-bottom: 32px;
 
         textarea {
             width: 100%;
+            font-size: ${fontSize.small};
         }
     }
 
     h2 {
-        font-size: 24px;
+        font-size: ${fontSize.big};
         color: #fff;
         margin-left: 4px;
     }
@@ -63,10 +64,10 @@ export const UsersBox = styled.div`
     display: flex;
     flex-direction: column;
     margin-left: 64px;
-    max-width: 200px;
+    width: 30%;
     
     h3 {
-        font-size: 28px;
+        font-size: ${fontSize.big};
         color: #fff;
         margin-left: 4px;
     }
