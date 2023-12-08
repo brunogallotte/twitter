@@ -1,8 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom'
-import { BoxForm, FormControl } from "./styles";
 import { ClipLoader } from "react-spinners";
+import { useNavigate } from 'react-router-dom'
+
 import Modal from "../Modal";
+
+import { BoxForm, FormControl } from "./styles";
 
 type FormState = {
     username: string
@@ -63,6 +65,7 @@ const LoginBox = () => {
     }
 
     // Atualiza o register data com os dados de login, password e email
+
     useEffect(()=> {
         setRegisterData({...formState, ...email})
     }, [formState, email])

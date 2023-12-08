@@ -9,11 +9,19 @@ export interface TweetData {
 }
 
 const Tweet: React.FC<TweetData> = ({ user, content, created_at }) => {
+
+    const formatCreatedAt = () => {
+        const publishedIn = created_at
+
+        return publishedIn.substring(0, 10);
+    }
+
+
     return (
         <TweetContent>
             <h4>@{user}</h4>
             <p>{content}</p>
-            <span>{created_at}</span>
+            <span>{formatCreatedAt()}</span>
         </TweetContent>
     )
 }

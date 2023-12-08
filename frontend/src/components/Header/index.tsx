@@ -1,8 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
 
 import Button from "../Button"
-import { Content, HeaderBar, NavBar } from "./styles"
-import { useEffect, useState } from "react"
+
+import * as S from "./styles"
 
 const Header = () => {
     const [logout, setLogout] = useState(false)
@@ -27,17 +28,17 @@ const Header = () => {
 
 
     return (
-        <HeaderBar>
-            <NavBar className="container">
-                <Content>
+        <S.HeaderBar>
+            <S.NavBar className="container">
+                <S.Content>
                     <h1>Twitter App</h1>
                     <ul>
                         <li>it's only for fun</li>
                     </ul>
-                </Content>
+                </S.Content>
                 <Button onClick={handleLogout}>{logout ? 'Logout' : 'Login'}</Button>
-            </NavBar>
-        </HeaderBar>
+            </S.NavBar>
+        </S.HeaderBar>
     )
 }
 

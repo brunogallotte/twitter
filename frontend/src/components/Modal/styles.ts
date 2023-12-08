@@ -1,5 +1,5 @@
 import { styled } from 'styled-components'
-import { colors, fontSize } from '../../styles'
+import { breakpoints, colors, fontSize } from '../../styles'
 
 export const ModalContainer = styled.div`
     position: fixed;
@@ -16,6 +16,14 @@ export const ModalContainer = styled.div`
 `
 
 export const ModalContent = styled.div`
+    @keyframes up {
+        to {
+            scale: 100%;
+        } from {
+            scale: 70%;
+        }
+    }
+
     position: relative;
     display: flex;
     width: 40%;
@@ -24,12 +32,26 @@ export const ModalContent = styled.div`
     background-color: ${colors.darkGrey};
     color: ${colors.lightGrey};
     z-index: 1;
-    border-bottom: 3px solid ${colors.purpleDark};
+    border-bottom: 3px solid ${colors.darkRed};
     justify-content: space-between;
     align-items: center;
+    animation: up .4s ease-in-out;
+
+    @media (max-width: ${breakpoints.desktoplg}) {
+        width: 80%;
+        height: 20%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
 
     h4 {
         font-size: ${fontSize.big};
+
+        @media (max-width: ${breakpoints.desktoplg}) {
+            margin-bottom: 8px;
+          }
     }
 
     p {

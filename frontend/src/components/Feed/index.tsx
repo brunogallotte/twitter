@@ -1,13 +1,16 @@
 import { ChangeEvent, useEffect, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
+import { RingLoader } from "react-spinners"
 
 import Button from "../Button"
-import { BoxTweet, FeedBox, UsersBox } from "./styles"
-import Tweet, { TweetData } from "../Tweet"
-import { RingLoader } from "react-spinners"
-import { LoadingContainer } from "../Tweet/styles"
 import { ModalState } from "../LoginBox"
 import Modal from "../Modal"
+
+import { LoadingContainer } from "../Tweet/styles"
+import Tweet, { TweetData } from "../Tweet"
+
+
+import * as S from "./styles"
 
 interface UsersResponse {
     count: number
@@ -27,7 +30,6 @@ interface UserData {
 const Feed = () => {
     const [data, setData] = useState<{ results: TweetData[] }>({ results: [] })
     const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken'))
-    const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken'))
     const [users, setUsers] = useState<UsersResponse | null>(null)
     const [tweetContent, setTweetContent] = useState({content: ''})
     const [showModal, setShowModal] = useState<ModalState>({isVisible: false, title: '', description: ''})
@@ -48,12 +50,9 @@ const Feed = () => {
 
                 if (!response.ok) {
                     if (response.status === 401) {
-                        await renewAccessToken();
-                        handleShowModal('Erro', 'Você precista estar logado para visualizar os tweets!')
-
-                        // Após renovar, tenta novamente a requisição original
-
-                        
+                        handleShowModal('Erro', 'Você precisa estar logado para visualizar os tweets!')
+                        setAccessToken(null)
+                    
                         const retryResponse = await fetch('https://brunogallotte.pythonanywhere.com/tweets/', {
                             method: 'GET',
                             headers: {
@@ -64,7 +63,7 @@ const Feed = () => {
 
                         if (retryResponse.ok) {
                             const jsonData: TweetData[] = await retryResponse.json();
-                            setData({ results: jsonData });;
+                            setData({ results: jsonData })
                         } else {
                             throw new Error('Network response was not ok after token renewal');
                         }
@@ -94,65 +93,40 @@ const Feed = () => {
             }
         }
 
-        // Renovar token de acesso [refresh]
-        const renewAccessToken = async () => {
-            try {
-                const renewResponse = await fetch('https://brunogallotte.pythonanywhere.com/token/refresh/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        refresh: refreshToken,
-                    }),
-                })
-
-                if (!renewResponse.ok) {
-                    throw new Error('Erro ao renovar token');
-                }
-
-                const renewedTokens = await renewResponse.json();
-
-                // Atualiza o estado ou armazenamento local com os novos tokens
-                setAccessToken(renewedTokens.access);
-                setRefreshToken(renewedTokens.refresh);
-
-            } catch (error) {
-                console.error('Error renewing access token:', error);
-
-                // Limpar os tokens de acesso e atualização
-                setAccessToken(null);
-                setRefreshToken(null);
-            }
-        };
-
         fetchData();
-    }, [accessToken, refreshToken]);
+    }, [accessToken])
 
     const handleTweetChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         setTweetContent({content: event.target.value})
     }
 
     const handlePostTweet = async () => {
-        try {
-            const response = await fetch('https://brunogallotte.pythonanywhere.com/tweets/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(tweetContent)
-            });
-    
-            if (!response.ok) {
-                alert('Falha ao tentar fazer o tweet!')
-                throw new Error('Network response was not ok');
+        if (tweetContent.content.length > 30 && tweetContent.content.length < 200) {
+
+            try {
+                const response = await fetch('https://brunogallotte.pythonanywhere.com/tweets/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                    body: JSON.stringify(tweetContent)
+                })
+        
+                if (!response.ok) {
+                    alert('Falha ao tentar fazer o tweet!')
+                    throw new Error('Network response was not ok')
+                }
+        
+                window.location.reload()
+        
+            } catch (error) {
+                console.error('Error posting tweet:', error)
             }
-    
-            window.location.reload()
-    
-        } catch (error) {
-            console.error('Error posting tweet:', error);
+        } else if (tweetContent.content.length < 30) {
+            handleShowModal('Erro', 'O tweet deve conter pelo menos 30 caracteres')
+        } else if (tweetContent.content.length > 200) {
+            handleShowModal('Erro', 'O tweet não pode exceder os 200 caracteres')
         }
     }
 
@@ -163,15 +137,15 @@ const Feed = () => {
     const handleCloseModal = () => {
         setShowModal({isVisible: false, title: '', description: ''})
         
-        if (location.pathname === '/home') {
+        if (location.pathname === '/home' && !accessToken) {
             navigate('/')
         }
     }
 
     return (
         <>
-            <FeedBox className="container">
-                <BoxTweet>
+            <S.FeedBox className="container">
+                <S.BoxTweet>
                     <div className="boxGrey">
                         <h2>Express yourself</h2>
                         <textarea value={tweetContent.content} onChange={handleTweetChange} placeholder="write your tweet here!"/>
@@ -193,8 +167,8 @@ const Feed = () => {
                             </LoadingContainer>
                         )}
                     </div>
-                </BoxTweet>
-                <UsersBox>
+                </S.BoxTweet>
+                <S.UsersBox>
                     <div className="verticalLine">
                         <h3>Users</h3>
                     </div>
@@ -211,8 +185,8 @@ const Feed = () => {
                             <RingLoader color="rgba(39, 0, 86, 1)" />
                         </LoadingContainer>
                     )}
-                </UsersBox>
-            </FeedBox>
+                </S.UsersBox>
+            </S.FeedBox>
             {showModal.isVisible ? <Modal handleShowModal={handleShowModal} handleCloseModal={handleCloseModal} title={showModal.title} description={showModal.description} /> : null}
         </>
     )

@@ -1,16 +1,25 @@
 import { styled } from 'styled-components'
-import { colors, fontSize } from '../../styles'
+import { breakpoints, colors, fontSize } from '../../styles'
 
 export const FeedBox = styled.div`
     display: flex;
     padding-top: 32px;
     justify-content: center;
+
+    @media (max-width: ${breakpoints.desktop}) {
+        width: 100%;
+        flex-direction: column;
+      }
 `
 
 export const BoxTweet = styled.div`
     display: flex;
     flex-direction: column;
     width: 70%;
+
+    @media (max-width: ${breakpoints.desktop}) {
+        width: 100%;
+      }
 
     .boxGrey {
         background-color: ${colors.darkGrey};
@@ -65,6 +74,12 @@ export const UsersBox = styled.div`
     flex-direction: column;
     margin-left: 64px;
     width: 30%;
+
+    @media (max-width: ${breakpoints.desktop}) {
+        margin-top: 32px;
+        margin-left: 0px;
+        width: 100%;
+      }
     
     h3 {
         font-size: ${fontSize.big};
